@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from os.path import expanduser
+
+home_dir = expanduser("~")
+traj_file_name = "joint_path_obs_robustIK_RealBaxter.txt"
+data = open(home_dir+"/ros_ws/traj_files/"+traj_file_name, 'r')
+line_num = 0
+all_data = []
+iter_data = []
+while True:
+    line = data.readline()
+    if not line:
+        break
+    angles = line.split(",")
+    pt = []
+    pt = [float(j) for j in angles]
+    all_data.append(pt)
+    iter_data.append(line_num)
+    line_num += 1
+print('Reading joint angle file completed')
+
+
+# Plot the data
+all_data = np.array(all_data)
+for i in range(all_data.shape[1]):
+    plt.plot(iter_data,all_data[:,i],linewidth=3,label="j"+str(i+1))
+plt.legend(loc="upper center", fontsize="small", ncol=all_data.shape[1])
+plt.xlabel("iterations")
+plt.ylabel(r"$\theta_i$"" [rad]")
+plt.grid()
+plt.show()
+
